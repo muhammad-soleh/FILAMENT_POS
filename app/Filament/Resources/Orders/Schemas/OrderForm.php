@@ -6,6 +6,7 @@ use App\Models\Costumer;
 use App\Models\Product;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
@@ -39,10 +40,10 @@ class OrderForm
                                 $set('address', $costumer->address ?? null);
                             })
                             ->required(),
-                        TextInput::make('phone')
-                            ->disabled(),
-                        TextInput::make('address')
-                            ->disabled(),
+                        Placeholder::make('phone')
+                            ->content(fn(Get $get) => Costumer::find($get('costumer_id'))?->phone ?? '-'),
+                        Placeholder::make('address')
+                            ->content(fn(Get $get) => Costumer::find($get('costumer_id'))?->address ?? '-'),
 
                     ])
                     ->columns(3)
@@ -53,12 +54,14 @@ class OrderForm
                     ->schema([
                         Repeater::make('orderdetail')
                             ->relationship()
+
                             ->schema([
                                 Select::make('product_id')
                                     ->relationship(
                                         'product',
                                         'name'
                                     )
+                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                         $product = Product::find($state);
@@ -73,7 +76,8 @@ class OrderForm
                                         $total = collect($items)->sum(fn($item) => $item['subtotal'] ?? 0);
                                         $set('../../total_price', $total);
                                     }),
-                                TextInput::make('price'),
+                                TextInput::make('price')->readOnly()->numeric()->dehydrated()->formatStateUsing(fn($state, Get $get)
+                                => $state ?? Product::find($get('product_id'))?->price ?? 0),
                                 TextInput::make('qty')
                                     ->numeric()
                                     ->default(1)
@@ -86,14 +90,18 @@ class OrderForm
                                         $set('../../total_price', $total);
                                     }),
                                 TextInput::make('subtotal')
-                                    ->numeric(),
+                                    ->numeric()
+                                    ->disabled()
+                                    ->dehydrated(),
                             ])->columns(3),
                     ])
                     ->columnSpanFull(),
 
                 TextInput::make('total_price')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->disabled()
+                    ->dehydrated(),
 
             ]);
     }
