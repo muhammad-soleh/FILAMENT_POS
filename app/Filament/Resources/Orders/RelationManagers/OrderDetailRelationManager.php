@@ -13,6 +13,7 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -35,6 +36,7 @@ class OrderDetailRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
+                ImageColumn::make('product.image')->label('Image'),
                 TextColumn::make('product.name')
                     ->searchable(),
                 TextColumn::make('product.price')

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -11,6 +12,7 @@ class ProductForm
     {
         return $schema
             ->components([
+                FileUpload::make('image'),
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('price')
