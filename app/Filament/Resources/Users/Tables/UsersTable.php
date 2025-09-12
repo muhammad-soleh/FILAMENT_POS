@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Orders\Tables;
+namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -10,22 +10,17 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class OrdersTable
+class UsersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('costumer.name')
-                    ->numeric()
-                    ->sortable()
+                TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('total_price')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('date')
-                    ->date()
-                    ->sortable(),
+                TextColumn::make('email')
+                    ->label('Email address')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

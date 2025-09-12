@@ -10,13 +10,34 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        $faker = Faker::create('id_ID'); // pakai locale Indonesia
+        $produkWarung = [
+            'Indomie Goreng',
+            'Indomie Ayam Bawang',
+            'Mie Sedap Kari Ayam',
+            'Beras 1 Kg',
+            'Minyak Goreng 1 Liter',
+            'Gula Pasir 1 Kg',
+            'Garam Dapur',
+            'Telur Ayam 1 Butir',
+            'Kopi Sachet',
+            'Teh Celup',
+            'Air Mineral Botol',
+            'Susu Kental Manis',
+            'Biskuit Kaleng',
+            'Roti Tawar',
+            'Permen Karet',
+            'Snack Ring',
+            'Keripik Kentang',
+            'Sabun Mandi',
+            'Shampo Sachet',
+            'Pasta Gigi',
+        ];
 
-        foreach (range(1, 10) as $index) {
+        foreach ($produkWarung as $index => $produk) {
             DB::table('products')->insert([
-                'name'  => $faker->words(3, true),  // contoh nama produk random
-                'price' => $faker->numberBetween(50000, 10000000), // harga 50rb - 10jt
-                'stock' => $faker->numberBetween(1, 100), // stok 1 - 100
+                'name' => $produk,
+                'price' => rand(1, 50) * 1000, // 1000 - 50000
+                'stock' => rand(5, 100),
             ]);
         }
     }

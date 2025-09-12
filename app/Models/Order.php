@@ -22,5 +22,9 @@ class Order extends Model
         'costumer_id',
         'date',
         'total_price',
+        'discount',
+        'discount_amount',
+        'total_payment',
+        'status',
     ];
 }
