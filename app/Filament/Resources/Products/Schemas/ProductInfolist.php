@@ -13,7 +13,7 @@ class ProductInfolist
             ->components([
                 TextEntry::make('name'),
                 TextEntry::make('price')
-                    ->money(),
+                    ->money('Rp. '),
                 TextEntry::make('stock')
                     ->numeric(),
                 TextEntry::make('created_at')

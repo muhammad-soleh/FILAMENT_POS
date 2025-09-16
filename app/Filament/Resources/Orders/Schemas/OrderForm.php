@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Orders\Schemas;
 
 use App\Models\Costumer;
 use App\Models\Product;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Placeholder;
@@ -37,6 +38,7 @@ class OrderForm
                             ->description('Costumer Information')
                             ->schema([
                                 Select::make('costumer_id')
+                                    ->label('Name')
                                     ->relationship('costumer', 'name')
                                     ->reactive()
                                     ->afterStateUpdated(function ($state, Set $set) {
@@ -86,10 +88,15 @@ class OrderForm
                                                 $set('../../discount_amount', $discount_amount);
                                                 $set('../../total_payment', $total - $discount_amount);
                                             }),
-                                        TextInput::make('price')->readOnly()->numeric()->dehydrated()->formatStateUsing(fn($state, Get $get)
-                                        => $state ?? Product::find($get('product_id'))?->price ?? 0),
+                                        TextInput::make('price')
+                                            ->readOnly()
+                                            ->numeric()
+                                            ->formatStateUsing(fn($state, Get $get)
+                                            => $state ?? Product::find($get('product_id'))?->price ?? 0)
+                                            ->prefix('Rp.'),
                                         TextInput::make('qty')
                                             ->numeric()
+                                            ->minValue(1)
                                             ->default(1)
                                             ->reactive()
                                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
@@ -106,9 +113,15 @@ class OrderForm
                                             }),
                                         TextInput::make('subtotal')
                                             ->numeric()
-                                            ->disabled()
-                                            ->dehydrated(),
-                                    ])->columns(3),
+                                            ->readOnly()
+                                            ->default(0)
+                                            ->prefix('Rp.'),
+                                    ])->columns(4)
+                                    ->hiddenLabel()
+                                    ->addAction(fn(Action $action) => $action
+                                        ->label('Add Product')
+                                        ->color('primary')
+                                        ->icon('heroicon-o-plus')),
                             ])
                             ->columnSpanFull(),
 
@@ -128,11 +141,12 @@ class OrderForm
                         TextInput::make('total_price')
                             ->required()
                             ->numeric()
-                            ->disabled()
-                            ->dehydrated()
-                            ->columnSpanFull(),
+                            ->readOnly()
+                            ->columnSpanFull()
+                            ->prefix('Rp.')
+                            ->default(0),
                         TextInput::make('discount')
-                            ->columnSpan(1)
+                            ->columnSpan(2)
                             ->reactive()
                             ->afterStateUpdated(function ($state, Set $set, Get $get) {
                                 $discount = floatval($state) ?? 0;
@@ -140,15 +154,22 @@ class OrderForm
                                 $discount_amount = $total_price * $discount / 100;
                                 $set('discount_amount', $discount_amount);
                                 $set('total_payment', $total_price - $discount_amount);
-                            }),
+                            })
+                            ->suffix('%')
+                            ->numeric()
+                            ->default(0)
+                            ->minValue(0)
+                            ->maxValue(100),
                         TextInput::make('discount_amount')
-                            ->columnSpan(3)
-                            ->disabled()
-                            ->dehydrated(),
+                            ->columnSpan(2)
+                            ->readOnly()
+                            ->prefix('Rp.')
+                            ->default(0),
                         TextInput::make('total_payment')
                             ->columnSpanFull()
-                            ->disabled()
-                            ->dehydrated(),
+                            ->readOnly()
+                            ->prefix('Rp.')
+                            ->default(0),
                     ])->columnSpan(1)->columns(4),
 
             ])->columns(3);

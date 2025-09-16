@@ -22,7 +22,30 @@ class OrdersTable
                     ->searchable(),
                 TextColumn::make('total_price')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->prefix('Rp. '),
+                TextColumn::make('discount')
+                    ->sortable()
+                    ->suffix('%'),
+                TextColumn::make('discount_amount')
+                    ->numeric()
+                    ->sortable()
+                    ->prefix('Rp. '),
+                TextColumn::make('total_payment')
+                    ->numeric()
+                    ->sortable()
+                    ->prefix('Rp. '),
+
+                TextColumn::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'new' => 'info',
+                        'processing' => 'warning',
+                        'completed' => 'success',
+                        'cancelled' => 'danger',
+                    }),
+
+
                 TextColumn::make('date')
                     ->date()
                     ->sortable(),
