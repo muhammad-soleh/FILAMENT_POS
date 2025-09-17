@@ -170,6 +170,22 @@ class OrderForm
                             ->readOnly()
                             ->prefix('Rp.')
                             ->default(0),
+                        Select::make('payment_method')
+                            ->options(
+                                [
+                                    'cash' => 'Cash',
+                                    'debit' => 'Debit',
+                                    'credit' => 'Credit',
+                                    'qris' => 'Qris'
+                                ]
+                            )->default('cash')
+                            ->columnSpan(2),
+                        Select::make('payment_status')
+                            ->options([
+                                'unpaid' => 'Unpaid',
+                                'paid' => 'Paid',
+                            ])->default('unpaid')
+                            ->columnSpan(2),
                     ])->columnSpan(1)->columns(4),
 
             ])->columns(3);

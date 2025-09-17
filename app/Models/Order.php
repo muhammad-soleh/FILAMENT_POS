@@ -26,5 +26,7 @@ class Order extends Model
         'discount_amount',
         'total_payment',
         'status',
+        'payment_status',
+        'paymnet_method',
     ];
 }

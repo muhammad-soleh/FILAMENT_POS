@@ -33,6 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Lehzo Store')
             // ->darkMode(false)
             ->login()
+            ->databaseNotifications()
             ->colors([
                 // 'primary' => Color::Amber,
                 'primary' => '#3B82F6',
