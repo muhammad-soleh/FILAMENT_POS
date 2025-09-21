@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
 
@@ -13,7 +15,7 @@ class ProductInfolist
             ->components([
                 TextEntry::make('name'),
                 TextEntry::make('price')
-                    ->money('Rp. '),
+                    ->money(),
                 TextEntry::make('stock')
                     ->numeric(),
                 TextEntry::make('created_at')
@@ -22,6 +24,21 @@ class ProductInfolist
                 TextEntry::make('updated_at')
                     ->dateTime()
                     ->placeholder('-'),
+                ImageEntry::make('image')
+                    ->placeholder('-'),
+                TextEntry::make('brand_id')
+                    ->numeric()
+                    ->placeholder('-'),
+                TextEntry::make('category_id')
+                    ->numeric()
+                    ->placeholder('-'),
+                TextEntry::make('subcategory_id')
+                    ->numeric()
+                    ->placeholder('-'),
+                IconEntry::make('is_active')
+                    ->boolean(),
+                IconEntry::make('in_stock')
+                    ->boolean(),
             ]);
     }
 }

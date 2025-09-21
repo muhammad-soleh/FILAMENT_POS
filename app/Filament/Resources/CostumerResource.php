@@ -24,12 +24,15 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use UnitEnum;
 
 class CostumerResource extends Resource
 {
     protected static ?string $model = Costumer::class;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user-group';
+    protected static ?int $navigationSort = 5;
+    protected static UnitEnum|string|null $navigationGroup = "User Management";
 
     public static function form(Schema $schema): Schema
     {

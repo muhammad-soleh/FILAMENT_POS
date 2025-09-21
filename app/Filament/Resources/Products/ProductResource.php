@@ -15,14 +15,16 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Squares2x2;
-
-    protected static ?string $recordTitleAttribute = 'Products';
+    protected static UnitEnum|string|null $navigationGroup = "Product Management";
+    protected static ?int $navigationSort = 4;
+    protected static ?string $recordTitleAttribute = 'Product';
 
     public static function form(Schema $schema): Schema
     {
@@ -54,5 +56,11 @@ class ProductResource extends Resource
             'view' => ViewProduct::route('/{record}'),
             'edit' => EditProduct::route('/{record}/edit'),
         ];
+    }
+
+    protected function mutateFormDataBeforeCreate(array $data): array
+    {
+        dd($data); // cek semua field
+        return $data;
     }
 }

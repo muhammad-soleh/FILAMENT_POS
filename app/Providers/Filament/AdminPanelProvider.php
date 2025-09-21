@@ -26,11 +26,12 @@ class AdminPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->sidebarWidth('12rem')
+            // ->sidebarWidth('12rem')
             ->default()
             ->id('admin')
             ->path('admin')
             ->brandName('Lehzo Store')
+            ->sidebarCollapsibleOnDesktop()
             // ->darkMode(false)
             ->login()
             ->databaseNotifications()

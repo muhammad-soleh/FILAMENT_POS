@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -20,12 +22,42 @@ class ProductsTable
                 ImageColumn::make('image'),
                 TextColumn::make('name')
                     ->searchable(),
+                TextColumn::make('base_price')
+                    ->money('RP. ')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('price')
-                    ->money('Rp. ')
+                    ->money('RP. ')
                     ->sortable(),
                 TextColumn::make('stock')
                     ->numeric()
                     ->sortable(),
+                TextColumn::make('sku')
+                    ->sortable()
+                    ->searchable(),
+                TextColumn::make('barcode')
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                TextColumn::make('brand.name')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('category.name')
+                    ->searchable()
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('subcategory.name')
+                    ->searchable()
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('is_active')
+                    ->boolean(),
+                IconColumn::make('in_stock')
+                    ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -39,9 +71,11 @@ class ProductsTable
                 //
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make(),
+                    DeleteAction::make(),
+                ])
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
