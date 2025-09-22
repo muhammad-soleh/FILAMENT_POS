@@ -39,6 +39,8 @@ class Product extends Model
         'sku',
         'barcode',
         'description',
-        'base_price'
+        'base_price',
+        'is_active',
+        'in_stock'
     ];
 }
