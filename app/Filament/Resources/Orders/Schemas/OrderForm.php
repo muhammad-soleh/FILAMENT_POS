@@ -16,6 +16,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class OrderForm
 {
@@ -46,7 +47,13 @@ class OrderForm
                                         $set('phone', $costumer->phone ?? null);
                                         $set('address', $costumer->address ?? null);
                                     })
-                                    ->required(),
+                                    ->required()
+                                    ->createOptionForm([
+                                        TextInput::make('name'),
+                                        TextInput::make('phone'),
+                                        TextInput::make('address'),
+
+                                    ]),
                                 Placeholder::make('phone')
                                     ->content(fn(Get $get) => Costumer::find($get('costumer_id'))?->phone ?? '-'),
                                 Placeholder::make('address')
@@ -64,9 +71,11 @@ class OrderForm
 
                                     ->schema([
                                         Select::make('product_id')
+                                            ->columnSpanFull()
                                             ->relationship(
                                                 'product',
-                                                'name'
+                                                'name',
+                                                modifyQueryUsing: fn(\Illuminate\Database\Eloquent\Builder $query) => $query->where('is_active', true)
                                             )
                                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                             ->reactive()
@@ -116,7 +125,7 @@ class OrderForm
                                             ->readOnly()
                                             ->default(0)
                                             ->prefix('Rp.'),
-                                    ])->columns(4)
+                                    ])->columns(3)
                                     ->hiddenLabel()
                                     ->addAction(fn(Action $action) => $action
                                         ->label('Add Product')

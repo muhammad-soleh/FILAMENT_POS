@@ -95,13 +95,23 @@ class ProductForm
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
-                        }),
+                        })
+                        ->createOptionForm([
+                            TextInput::make('name'),
+                            FileUpload::make('image'),
+                            Toggle::make('is_active'),
+                        ]),
                     Select::make('category_id')
                         ->relationship('category', 'name', fn($query) => $query->where('is_active', true))
                         ->reactive()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
-                        }),
+                        })
+                        ->createOptionForm([
+                            TextInput::make('name'),
+                            FileUpload::make('image'),
+                            Toggle::make('is_active'),
+                        ]),
                     Select::make('subcategory_id')
                         ->label('Sub Category')
                         ->reactive()
@@ -117,6 +127,16 @@ class ProductForm
                         ->dehydrated()
                         ->afterStateUpdated(function (Get $get, Set $set) {
                             static::generateSku($get, $set);
+                        })
+                        ->createOptionForm([
+                            Select::make('category_id')
+                                ->options(Category::pluck('name', 'id')),
+                            TextInput::make('name'),
+                            FileUpload::make('image'),
+                            Toggle::make('is_active'),
+                        ])
+                        ->createOptionUsing(function (array $data): int {
+                            return SubCategory::create($data)->getKey();
                         }),
                     FileUpload::make('image')
                         ->image(),
