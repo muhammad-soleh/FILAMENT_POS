@@ -2,28 +2,44 @@
 
 namespace App\Filament\Resources\Brands;
 
-use App\Filament\Resources\Brands\Pages\CreateBrand;
-use App\Filament\Resources\Brands\Pages\EditBrand;
-use App\Filament\Resources\Brands\Pages\ListBrands;
-use App\Filament\Resources\Brands\Pages\ViewBrand;
-use App\Filament\Resources\Brands\Schemas\BrandForm;
-use App\Filament\Resources\Brands\Schemas\BrandInfolist;
-use App\Filament\Resources\Brands\Tables\BrandsTable;
-use App\Models\Brand;
-use BackedEnum;
-use Filament\Resources\Resource;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Table;
 use UnitEnum;
+use BackedEnum;
+use App\Models\Brand;
+use Filament\Tables\Table;
+use Filament\Schemas\Schema;
+use Filament\Resources\Resource;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Database\Eloquent\Model;
+use App\Filament\Resources\Brands\Pages\EditBrand;
+use App\Filament\Resources\Brands\Pages\ViewBrand;
+use App\Filament\Resources\Brands\Pages\ListBrands;
+use App\Filament\Resources\Brands\Pages\CreateBrand;
+use App\Filament\Resources\Brands\Schemas\BrandForm;
+use App\Filament\Resources\Brands\Tables\BrandsTable;
+use App\Filament\Resources\Brands\Schemas\BrandInfolist;
 
 class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::BookmarkSquare;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBookmarkSquare;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicon::BookmarkSquare;
     protected static UnitEnum|string|null $navigationGroup = "Product Management";
     protected static ?int $navigationSort = 1;
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'name' => $record->name,
+
+        ];
+    }
+
     protected static ?string $recordTitleAttribute = 'Brand';
 
     public static function form(Schema $schema): Schema
